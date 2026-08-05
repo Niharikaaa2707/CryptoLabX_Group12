@@ -1,0 +1,1 @@
+Cryptography is the science of securing information from attackers.
