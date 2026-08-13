@@ -23,17 +23,29 @@ Currently, the project provides a menu-driven command-line interface, file analy
 CryptoLabX_Group12
 │
 ├── classical/
-├── attacks/
-├── math/
 ├── modern/
+├── hashing/
+├── attacks/
 ├── analysis/
-├── datasets/
-├── outputs/
 ├── docs/
 ├── tests/
 ├── utils/
 │   └── logger.py
 │
+├── secure_application/
+│   ├── src/
+│   │   └── banking.py
+│   ├── reports/
+│   │   └── sast_report.txt
+│   ├── screenshots/
+│   │   └── sast_scan_results.png
+│   ├── sast/
+│   ├── outputs/
+│   ├── testcases/
+│   └── README.md
+│
+├── datasets/
+├── outputs/
 ├── main.py
 ├── README.md
 └── requirements.txt

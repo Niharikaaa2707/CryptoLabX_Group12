@@ -1,0 +1,24 @@
+[2026-08-13 11:41:54] LOGIN TRY - Account: acc101, Plaintext Password: password123
+[2026-08-13 12:19:02] LOGIN TRY - Account: acc101, Plaintext Password: password123
+[2026-08-13 12:19:11] User acc101 viewed balance for acc101
+[2026-08-13 12:19:42] TRANSFER - acc101 sent $200.0 to acc102
+[2026-08-13 12:20:00] LOGOUT - User acc101
+[2026-08-13 12:20:18] LOGIN TRY - Account: acc102, Plaintext Password: securepass456
+[2026-08-13 12:20:25] User acc102 viewed balance for acc102
+[2026-08-13 12:23:16] LOGIN TRY - Account: acc1011, Plaintext Password: password123
+[2026-08-13 12:23:31] LOGIN TRY - Account: acc101, Plaintext Password: password123
+[2026-08-13 12:23:51] LOGIN TRY - Account: acc102, Plaintext Password: securepass456
+[2026-08-13 12:23:59] User acc102 viewed balance for acc102
+[2026-08-13 12:24:25] LOGIN TRY - Account: acc101, Plaintext Password: password123
+[2026-08-13 12:24:31] User acc101 viewed balance for acc101
+[2026-08-13 12:24:48] User acc101 viewed balance for acc102
+[2026-08-13 12:25:27] TRANSFER - acc102 sent $200.0 to acc101
+[2026-08-13 12:25:33] User acc102 viewed balance for acc102
+[2026-08-13 12:25:40] User acc101 viewed balance for acc101
+[2026-08-13 12:27:57] LOGIN TRY - Account: acc101, Plaintext Password: password123
+[2026-08-13 12:28:02] User acc101 viewed balance for acc101
+[2026-08-13 12:32:09] LOGIN TRY - Account: acc101, Plaintext Password: password123
+[2026-08-13 12:32:16] User acc101 viewed balance for acc101
+[2026-08-13 12:32:22] User acc101 viewed balance for acc102
+[2026-08-13 12:32:38] TRANSFER - acc101 sent $-400.0 to acc102
+[2026-08-13 12:32:45] User acc101 viewed balance for acc101

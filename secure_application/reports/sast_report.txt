@@ -1,0 +1,41 @@
+Run started:2026-08-13 06:14:58.243106+00:00
+
+Test results:
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password123'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: secure_application/src/banking.py:12:32
+11	USERS = {
+12	    "acc101": {"name": "Alice", "password": "password123", "pin": "1234", "balance": 1000.0, "beneficiaries": []},
+13	    "acc102": {"name": "Bob", "password": "securepass456", "pin": "5678", "balance": 500.0, "beneficiaries": []}
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'securepass456'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: secure_application/src/banking.py:13:30
+12	    "acc101": {"name": "Alice", "password": "password123", "pin": "1234", "balance": 1000.0, "beneficiaries": []},
+13	    "acc102": {"name": "Bob", "password": "securepass456", "pin": "5678", "balance": 500.0, "beneficiaries": []}
+14	}
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 100
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 2
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 2
+		High: 0
+Files skipped (0):
