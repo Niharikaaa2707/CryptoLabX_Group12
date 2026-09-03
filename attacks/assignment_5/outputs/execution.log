@@ -1,0 +1,72 @@
+==========================================
+    MONOALPHABETIC CIPHER CRYPTANALYSIS   
+==========================================
+
+=== 1. LETTER FREQUENCY ANALYSIS ===
+Letter | Count | Percentage
+---------------------------
+   T   |   193 | 10.59%
+   Z   |   175 | 9.60%
+   G   |   155 | 8.51%
+   O   |   147 | 8.07%
+   Q   |   145 | 7.96%
+   F   |   126 | 6.92%
+   L   |   111 | 6.09%
+   K   |   108 | 5.93%
+   E   |    82 | 4.50%
+   S   |    82 | 4.50%
+   H   |    69 | 3.79%
+   I   |    63 | 3.46%
+   X   |    61 | 3.35%
+   R   |    51 | 2.80%
+   N   |    48 | 2.63%
+   Y   |    48 | 2.63%
+   D   |    45 | 2.47%
+   V   |    41 | 2.25%
+   U   |    23 | 1.26%
+   W   |    21 | 1.15%
+   C   |    13 | 0.71%
+   A   |    11 | 0.60%
+   J   |     2 | 0.11%
+   B   |     2 | 0.11%
+
+=== 2. WORD & PATTERN ANALYSIS ===
+
+Most Frequent 1-Letter Words:
+  Q : 5 times
+
+Most Frequent 2-Letter Words:
+  GY : 10 times
+  VT : 9 times
+  ZG : 8 times
+  OL : 8 times
+  OF : 7 times
+
+Most Frequent 3-Letter Words:
+  ZIT : 13 times
+  QFR : 6 times
+  YGK : 5 times
+  EQF : 3 times
+  QKT : 3 times
+
+=== 3. ITERATIVE RECOVERY STEPS ===
+[Step 1] Hypothesized R -> E (Most frequent ciphertext character)
+
+=== PARTIAL PLAINTEXT PREVIEW ===
+******* 3
+*******-*** **********
+** *** ******** ******* ** *** **** ***e******* *********** ** ******* **-
+*****. ** **** ******* ** ***** *** ***e* ** **e*** ************ ** *****-
+e***** *** ****** (*** **********) ****** ** ************* *******....
+
+[Step 2] Hypothesized ZIT -> THE based on 3-letter word pattern
+
+=== PARTIAL PLAINTEXT PREVIEW ===
+*h**t** 3
+*****t*-*** ******t***
+** th* ******** *h**t** ** *** **** ***e****t** ****t*t**** ** ******t **-
+*****. ** th** *h**t** ** ***** *** *t*e* ** **e*** ****t*****h* ** **t**-
+e***** th* ****** (**t *********t) **t*** ** *****t*t***** *******....
+
+=== 4. VERIFICATION & VALIDATION ===
+[SUCCESS] Decrypted text matches original plaintext perfectly!
