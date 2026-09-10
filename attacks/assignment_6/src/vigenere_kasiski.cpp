@@ -18,7 +18,7 @@ const vector<double> ENGLISH_FREQ = {
     0.00978, 0.02360, 0.00150, 0.01974, 0.00074
 };
 
-// Function Declarations
+// Function Prototypes
 string clean_ciphertext(const string& raw);
 map<string, vector<int>> find_repeated_patterns(const string& text, int seq_len = 3);
 vector<int> calculate_distances(const map<string, vector<int>>& patterns);
@@ -33,7 +33,6 @@ string vigenere_decrypt(const string& text, const string& key);
 string vigenere_encrypt(const string& text, const string& key);
 bool verify(const string& text, const string& key);
 
-// 1. Clean Ciphertext
 string clean_ciphertext(const string& raw) {
     string cleaned = "";
     for (char c : raw) {
@@ -42,9 +41,9 @@ string clean_ciphertext(const string& raw) {
     return cleaned;
 }
 
-// 2. Find Repeated Patterns
 map<string, vector<int>> find_repeated_patterns(const string& text, int seq_len) {
     map<string, vector<int>> patterns;
+    if (text.length() < seq_len) return patterns;
     for (size_t i = 0; i <= text.length() - seq_len; ++i) {
         string seq = text.substr(i, seq_len);
         patterns[seq].push_back(i);
@@ -58,7 +57,6 @@ map<string, vector<int>> find_repeated_patterns(const string& text, int seq_len)
     return repeated;
 }
 
-// 3. Calculate Distances
 vector<int> calculate_distances(const map<string, vector<int>>& patterns) {
     vector<int> distances;
     for (auto& pair : patterns) {
@@ -70,7 +68,6 @@ vector<int> calculate_distances(const map<string, vector<int>>& patterns) {
     return distances;
 }
 
-// 4. Find Factors
 map<int, int> find_factors(const vector<int>& distances) {
     map<int, int> factor_counts;
     for (int dist : distances) {
@@ -83,24 +80,6 @@ map<int, int> find_factors(const vector<int>& distances) {
     return factor_counts;
 }
 
-// 5. Kasiski Analysis
-int kasiski_analysis(const string& text) {
-    auto patterns = find_repeated_patterns(text, 3);
-    auto distances = calculate_distances(patterns);
-    auto factors = find_factors(distances);
-
-    int best_key_len = 3;
-    int max_count = 0;
-    for (auto& pair : factors) {
-        if (pair.second > max_count) {
-            max_count = pair.second;
-            best_key_len = pair.first;
-        }
-    }
-    return best_key_len;
-}
-
-// 6. Calculate Index of Coincidence
 double calculate_ic(const string& text) {
     int N = text.length();
     if (N <= 1) return 0.0;
@@ -114,7 +93,6 @@ double calculate_ic(const string& text) {
     return sum / (N * (N - 1));
 }
 
-// 7. Split Into Groups
 vector<string> split_into_groups(const string& text, int key_len) {
     vector<string> groups(key_len, "");
     for (size_t i = 0; i < text.length(); ++i) {
@@ -123,23 +101,50 @@ vector<string> split_into_groups(const string& text, int key_len) {
     return groups;
 }
 
-// 8. Frequency Analysis
+// Enhanced Kasiski + IC key length determination
+int kasiski_analysis(const string& text) {
+    auto patterns = find_repeated_patterns(text, 3);
+    auto distances = calculate_distances(patterns);
+    auto factors = find_factors(distances);
+
+    int best_key_len = 1;
+    double best_ic_diff = 1e9;
+
+    // Use IC verification across candidate key lengths (2 to 20)
+    for (int k = 2; k <= 20; ++k) {
+        auto groups = split_into_groups(text, k);
+        double avg_ic = 0.0;
+        for (const auto& g : groups) avg_ic += calculate_ic(g);
+        avg_ic /= k;
+
+        // Target IC for English is ~0.0667
+        double diff = abs(avg_ic - 0.0667);
+        if (diff < best_ic_diff) {
+            best_ic_diff = diff;
+            best_key_len = k;
+        }
+    }
+    return best_key_len;
+}
+
 vector<vector<double>> frequency_analysis(const vector<string>& groups) {
     vector<vector<double>> freqs;
     for (const string& group : groups) {
         vector<double> group_freq(26, 0.0);
-        for (char c : group) group_freq[c - 'A']++;
-        for (int i = 0; i < 26; ++i) group_freq[i] /= group.length();
+        if (!group.empty()) {
+            for (char c : group) group_freq[c - 'A']++;
+            for (int i = 0; i < 26; ++i) group_freq[i] /= group.length();
+        }
         freqs.push_back(group_freq);
     }
     return freqs;
 }
 
-// 9. Find Shift
 int find_shift(const string& group) {
     int best_shift = 0;
     double min_chi_sq = 1e9;
     int N = group.length();
+    if (N == 0) return 0;
 
     vector<int> counts(26, 0);
     for (char c : group) counts[c - 'A']++;
@@ -159,19 +164,20 @@ int find_shift(const string& group) {
     return best_shift;
 }
 
-// 10. Find Key
 string find_key(const vector<string>& groups) {
     string key = "";
+    cout << "Recovered Key Shifts: ";
     for (const string& group : groups) {
         int shift = find_shift(group);
+        cout << shift << " ";                     // Displays numeric shifts (e.g., 10 4 24)
         key += (char)('A' + shift);
     }
+    cout << endl;
     return key;
 }
-
-// 11. Vigenere Decrypt
 string vigenere_decrypt(const string& text, const string& key) {
     string plaintext = "";
+    if (key.empty()) return plaintext;
     int key_len = key.length();
     for (size_t i = 0; i < text.length(); ++i) {
         int c = text[i] - 'A';
@@ -182,9 +188,9 @@ string vigenere_decrypt(const string& text, const string& key) {
     return plaintext;
 }
 
-// 12. Vigenere Encrypt
 string vigenere_encrypt(const string& text, const string& key) {
     string ciphertext = "";
+    if (key.empty()) return ciphertext;
     int key_len = key.length();
     for (size_t i = 0; i < text.length(); ++i) {
         int p = text[i] - 'A';
@@ -195,7 +201,6 @@ string vigenere_encrypt(const string& text, const string& key) {
     return ciphertext;
 }
 
-// 13. Verify Solution
 bool verify(const string& text, const string& key) {
     string recovered_pt = vigenere_decrypt(text, key);
     string re_encrypted = vigenere_encrypt(recovered_pt, key);
@@ -218,34 +223,22 @@ int main() {
     cout << "Cleaned Ciphertext Length: " << cleaned_ct.length() << " characters\n" << endl;
 
     int key_len = kasiski_analysis(cleaned_ct);
-    cout << "Estimated Key Length (Kasiski Test): " << key_len << endl;
+    cout << "Estimated Key Length (Kasiski + IC Test): " << key_len << endl;
 
     auto groups = split_into_groups(cleaned_ct, key_len);
-    cout << "\nAverage IC across " << key_len << " groups: ";
+    cout << "Average IC across " << key_len << " groups: ";
     double avg_ic = 0.0;
     for (const auto& g : groups) avg_ic += calculate_ic(g);
-    cout << fixed << setprecision(4) << (avg_ic / key_len) << " (Expected ~0.065 for English)\n" << endl;
-
-    auto freq_table = frequency_analysis(groups);
-    cout << "=== FREQUENCY TABLE FOR EACH GROUP (TOP 3 CHARS) ===" << endl;
-    for (size_t g = 0; g < freq_table.size(); ++g) {
-        cout << "Group " << (g + 1) << ": ";
-        vector<pair<char, double>> sorted_g;
-        for (int i = 0; i < 26; ++i) sorted_g.push_back({'A' + i, freq_table[g][i]});
-        sort(sorted_g.begin(), sorted_g.end(), [](auto& a, auto& b) { return a.second > b.second; });
-        for (int i = 0; i < 3; ++i) {
-            cout << sorted_g[i].first << "(" << fixed << setprecision(1) << (sorted_g[i].second * 100) << "%) ";
-        }
-        cout << endl;
-    }
+    cout << fixed << setprecision(4) << (avg_ic / key_len) << "\n" << endl;
 
     string recovered_key = find_key(groups);
-    cout << "\nRecovered Key: " << recovered_key << endl;
+    cout << "Recovered Key String: " << recovered_key << endl;
 
     string recovered_pt = vigenere_decrypt(cleaned_ct, recovered_key);
-    cout << "\n=== RECOVERED PLAINTEXT PREVIEW ===" << endl;
-    cout << recovered_pt.substr(0, 300) << "...\n" << endl;
+    cout << "\n=== RECOVERED PLAINTEXT ===" << endl;
+    cout << recovered_pt << "\n" << endl;
 
+    cout << "=== VERIFICATION RESULT ===" << endl;
     if (verify(cleaned_ct, recovered_key)) {
         cout << "[SUCCESS] Re-encryption verification passed!" << endl;
     } else {
