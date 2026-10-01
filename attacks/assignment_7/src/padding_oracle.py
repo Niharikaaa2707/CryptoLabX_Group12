@@ -10,31 +10,26 @@ iv = b"abcdefghijklmnop"
 
 plaintext = b"This is a secret message."
 
-
+# Encrypt plaintext
 cipher = AES.new(key, AES.MODE_CBC, iv)
-
-ciphertext = cipher.encrypt(
-    pad(plaintext, BLOCK_SIZE)
-)
+ciphertext = cipher.encrypt(pad(plaintext, BLOCK_SIZE))
 
 
-def padding_oracle(iv, ciphertext):
-
+# Padding oracle
+def padding_oracle(test_iv, test_ciphertext):
     global query_count
     query_count += 1
 
     try:
-        cipher = AES.new(key, AES.MODE_CBC, iv)
-
-        decrypted = cipher.decrypt(ciphertext)
-
+        cipher = AES.new(key, AES.MODE_CBC, test_iv)
+        decrypted = cipher.decrypt(test_ciphertext)
         unpad(decrypted, BLOCK_SIZE)
-
         return True
-
     except ValueError:
         return False
 
+
+# Recover one plaintext block
 def attack_block(previous_block, target_block):
 
     intermediate = bytearray(BLOCK_SIZE)
@@ -53,40 +48,55 @@ def attack_block(previous_block, target_block):
             modified[pos] = guess
 
             if padding_oracle(bytes(modified), target_block):
+
+                # Check for false positive padding
+                if pos > 0:
+                    check = bytearray(modified)
+                    check[pos - 1] ^= 1
+
+                    if not padding_oracle(bytes(check), target_block):
+                        continue
+
                 intermediate[pos] = guess ^ padding
                 recovered[pos] = intermediate[pos] ^ previous_block[pos]
-
-                print(
-                    "Recovered:",
-                    chr(recovered[pos]) if 32 <= recovered[pos] <= 126 else recovered[pos]
-                )
 
                 break
 
     return bytes(recovered)
 
-print("Plaintext:")
+
+# Split ciphertext into blocks
+blocks = [
+    ciphertext[i:i + BLOCK_SIZE]
+    for i in range(0, len(ciphertext), BLOCK_SIZE)
+]
+
+
+# Recover all plaintext blocks
+recovered_plaintext = b""
+previous_block = iv
+
+for block in blocks:
+
+    recovered_block = attack_block(previous_block, block)
+
+    recovered_plaintext += recovered_block
+
+    previous_block = block
+
+
+# Remove PKCS#7 padding
+recovered_plaintext = unpad(recovered_plaintext, BLOCK_SIZE)
+
+
+print("Original plaintext:")
 print(plaintext)
 
 print("\nCiphertext:")
 print(ciphertext)
 
-print("\nOracle test:")
-print(padding_oracle(iv, ciphertext))
+print("\nRecovered plaintext:")
+print(recovered_plaintext)
 
-bad_ciphertext = bytearray(ciphertext)
-bad_ciphertext[-1] ^= 1
-
-print("\nModified ciphertext oracle:")
-print(padding_oracle(iv, bytes(bad_ciphertext)))
-
-print("\nStarting attack...")
-
-first_block = ciphertext[:BLOCK_SIZE]
-
-recovered_block = attack_block(iv, first_block)
-
-print("\nRecovered first block:")
-print(recovered_block)
-
-print("\nOracle queries:", query_count)
+print("\nOracle queries:")
+print(query_count)
