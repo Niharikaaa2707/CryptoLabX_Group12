@@ -3,6 +3,7 @@ from Crypto.Util.Padding import pad, unpad
 
 
 BLOCK_SIZE = 16
+query_count = 0
 
 key = b"1234567890123456"
 iv = b"abcdefghijklmnop"
@@ -19,6 +20,9 @@ ciphertext = cipher.encrypt(
 
 def padding_oracle(ciphertext):
 
+    global query_count
+    query_count += 1
+
     try:
         cipher = AES.new(key, AES.MODE_CBC, iv)
 
@@ -30,7 +34,6 @@ def padding_oracle(ciphertext):
 
     except ValueError:
         return False
-
 
 print("Plaintext:")
 print(plaintext)
@@ -47,3 +50,5 @@ bad_ciphertext[-1] ^= 1
 
 print("\nModified ciphertext oracle:")
 print(padding_oracle(bytes(bad_ciphertext)))
+
+print("\nOracle queries:", query_count)
