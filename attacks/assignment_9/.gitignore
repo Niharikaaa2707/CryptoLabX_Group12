@@ -1,0 +1,4 @@
+outputs/data/*.bin
+outputs/data/*.dat
+__pycache__/
+
