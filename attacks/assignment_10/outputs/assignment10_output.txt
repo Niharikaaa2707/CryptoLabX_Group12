@@ -1,0 +1,31 @@
+==================================================
+PART 1: MT19937 STREAM CIPHER
+==================================================
+Test message         : Cryptography Lab Assignment 10
+Seed                 : 12345
+Ciphertext (hex)     : 29c97ba1a7a22ba83f9e593cb023483d3f9e1d31e6c742f1e8412e9cc48b
+Decrypted message    : Cryptography Lab Assignment 10
+Decryption successful: True
+
+PART A: KNOWN-PLAINTEXT ATTACK
+Original 16-bit seed: 11314
+Plaintext            : ROw|+cLvuAAAAAAAAAAAAAA
+Ciphertext (hex)     : f5cb921e43c85a47820ad7878de6c1e3ab747c30a6f399
+Seeds tested         : 65536
+Matching seeds       : [11314]
+Recovered seed       : 11314
+Recovered plaintext  : ROw|+cLvuAAAAAAAAAAAAAA
+Seed is correct      : True
+Full plaintext match : True
+Known text present   : True
+
+PART B: PREDICTABLE PASSWORD RESET TOKEN
+Generation timestamp : 1793859334
+Observed token (hex) : cb3d983634dd0988417c6e7fb7c9c453
+Search interval      : 1793859034 to 1793859634
+Timestamps tested    : 601
+Matching timestamps  : [1793859334]
+Recovered timestamp  : 1793859334
+Timestamp is correct : True
+Regenerated token    : cb3d983634dd0988417c6e7fb7c9c453
+Token verification  : True

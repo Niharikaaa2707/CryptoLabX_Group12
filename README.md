@@ -19,7 +19,7 @@ Currently, the project provides a menu-driven command-line interface, file analy
 
 ## Project Structure
 
-```
+```text
 CryptoLabX_Group12
 │
 ├── classical/
@@ -63,6 +63,26 @@ CryptoLabX_Group12
 - Letter Frequency Calculation
 - Execution Logging
 - Dataset Management
+
+---
+
+## Assignments and Practical Implementations
+
+Throughout the laboratory assignments, CryptoLabX is being extended with various cryptographic algorithms, security techniques, and cryptanalysis methods.
+
+The practical work includes:
+
+- Implementation of classical encryption algorithms and their cryptanalytic attacks.
+- Hashing techniques and password security analysis.
+- Modern cryptographic algorithms and secure encryption mechanisms.
+- Padding Oracle Attack against AES-CBC encryption.
+- Miller-Rabin primality testing and large probable prime generation.
+- Random number generation and statistical analysis of operating system CSPRNGs.
+- MT19937-based stream cipher implementation and known-plaintext seed recovery.
+- Predictable password reset token generation and timestamp-based brute-force attacks.
+- Security analysis, vulnerability testing, and practical demonstrations.
+
+These assignments help develop an understanding of cryptographic algorithms, their implementation, possible vulnerabilities, and appropriate security practices.
 
 ---
 
